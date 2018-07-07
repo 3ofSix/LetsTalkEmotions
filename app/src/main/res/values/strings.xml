@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Lets Talk Emotions</string>
+    <string name="new_child_message">Add New Child</string>
+    <string name="child_first_name">First Name</string>
+    <string name="child_last_name">Last Name</string>
+    <string name="title_activity_child">ChildActivity</string>
+</resources>
