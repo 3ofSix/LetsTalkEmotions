@@ -1,4 +1,4 @@
-/**
+/*
  * Recycler view used to display child objects from the database
  */
 
@@ -30,8 +30,9 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<ChildRecycler
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = mInflator.inflate(R.layout.child_list, parent, false);
-        ViewHolder holder = new ViewHolder(itemView);
-        return holder;
+//        ViewHolder holder = new ViewHolder(itemView);
+        return new ViewHolder(itemView);
+//        return holder;
     }
 
     @Override
@@ -40,7 +41,7 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<ChildRecycler
         if (mChild != null){
             Child current = mChild.get(position);
             holder.childName.setText(current.getFirstName());
-            //TODO add OnClickListner
+            //TODO add OnClickListener
         }else {
             holder.childName.setText("No Child");
         }
