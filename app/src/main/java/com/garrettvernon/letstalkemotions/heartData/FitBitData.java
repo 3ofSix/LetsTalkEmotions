@@ -15,7 +15,7 @@ import okhttp3.Response;
         end-date	The end date of the range.
         date	The end date of the period specified in the format yyyy-MM-dd or today.
         period	The range for which data will be returned. Options are 1d, 7d, 30d, 1w, 1m.
-
+        user id: 6SKNR6
         Greater DETAIL
 
         GET https://api.fitbit.com/1/user/-/activities/heart/date/[date]/[end-date]/[detail-level].json
@@ -25,8 +25,8 @@ import okhttp3.Response;
 public class FitBitData {
     private static final String TAG = "FitBitData";
     private final OkHttpClient client = new OkHttpClient();
-    private final String baseUrl = "https://api.fitbit.com/1/user/-/activities/heart/date/05-08-2018/1d/1sec.json";
-    private final String headerAuthorisationToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2U0tOUjYiLCJhdWQiOiIyMkNYTTYiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNTMzNzUzNDQ0LCJpYXQiOjE1MzMxNDg2NDR9.JrrPOUXJDcllWK3kkrLhXaNNiGs6-OJ34DB8Qyhaoww";
+    private final String baseUrl = "https://api.fitbit.com/1/user/-/activities/heart/date/2018-08-05/1d/1sec.json";
+    private final String headerAuthorisationToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2U0tOUjYiLCJhdWQiOiIyMkNYTTYiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNTM2MzU0MzMxLCJpYXQiOjE1MzM3NjIzMzF9.kIaNR4Sh-rBMvDF5FVqkIcPJbYN4ZOJ-p7oaCOAHxTc";
 
     public String getFitBitData() throws IOException {
         Request request = new Request.Builder()
