@@ -1,4 +1,4 @@
-package com.garrettvernon.letstalkemotions;
+package com.garrettvernon.letstalkemotions.main;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -10,6 +10,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+
+import com.garrettvernon.letstalkemotions.AddChild;
+import com.garrettvernon.letstalkemotions.Child;
+import com.garrettvernon.letstalkemotions.ChildRecyclerViewAdapter;
+import com.garrettvernon.letstalkemotions.ChildViewModel;
+import com.garrettvernon.letstalkemotions.R;
 
 import java.util.List;
 

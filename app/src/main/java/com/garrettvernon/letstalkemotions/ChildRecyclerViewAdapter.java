@@ -5,6 +5,7 @@
 package com.garrettvernon.letstalkemotions;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,13 +16,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.garrettvernon.letstalkemotions.child.ChildMain;
+
 import java.util.List;
 
 public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<ChildRecyclerViewAdapter.ViewHolder>{
     private static final String TAG = "ChildViewAdapter";
     private final LayoutInflater mInflator;
     private List<Child> mChild;
-
     public ChildRecyclerViewAdapter(Context context) {
         mInflator = LayoutInflater.from(context);
     }
@@ -41,7 +43,15 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<ChildRecycler
         if (mChild != null){
             Child current = mChild.get(position);
             holder.childName.setText(current.getFirstName());
-            //TODO add OnClickListener
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Start ChildMain activity
+                    Intent intent = new Intent(v.getContext(), ChildMain.class);
+                    //Intent intent = new Intent(getApplicationContext(), ChildMain.class);
+                    v.getContext().startActivity(intent);
+                }
+            });
         }else {
             holder.childName.setText("No Child");
         }
