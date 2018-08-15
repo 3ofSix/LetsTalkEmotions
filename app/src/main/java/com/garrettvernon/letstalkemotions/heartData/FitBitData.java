@@ -1,10 +1,18 @@
 package com.garrettvernon.letstalkemotions.heartData;
 
 import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
+
 import java.io.IOException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 //TODO This is proof of concept and works. TIdy up code to a useable class
 /*GET https://api.fitbit.com/1/user/[user-id]/activities/heart/date/[date]/[period].json
@@ -41,14 +49,19 @@ public class FitBitData {
                 Log.d(TAG, "getFitBitData: IOException" + response);
                 throw new IOException("Unexpected code " + response);
             }
-
+            //String jsonData = response.body().string().toString();
             return response.body().string();
         }
     }
 
     //TODO Remove main method before final packaging
     public static void main(String[] args) throws Exception {
-        System.out.println(new FitBitData().getFitBitData());
+        String jString = new FitBitData().getFitBitData();
+        //String bodyString = jString.string();
+        JsonParser parser = new JsonParser();
+        //JsonArray array = parser.parse(bodyString).getAsJsonArray();
+        //JSONObject jsonObject = new JSONObject(jString);
+        //JSONArray jsonArray = jsonObject.getJSONArray("heart-data-intraday");
     }
 
 }

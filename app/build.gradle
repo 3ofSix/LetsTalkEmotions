@@ -48,4 +48,5 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$rootProject.okHttpVersion"
     //Moshi JSON parser
     implementation 'com.squareup.moshi:moshi:1.6.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
