@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.garrettvernon.letstalkemotions.child.ChildMain;
+import com.garrettvernon.letstalkemotions.heartData.LineChart;
 
 import java.util.List;
 
@@ -47,7 +48,8 @@ public class ChildRecyclerViewAdapter extends RecyclerView.Adapter<ChildRecycler
                 @Override
                 public void onClick(View v) {
                     //Start ChildMain activity
-                    Intent intent = new Intent(v.getContext(), ChildMain.class);
+                    //Intent intent = new Intent(v.getContext(), ChildMain.class);
+                    Intent intent =new Intent(v.getContext(), LineChart.class);
                     //Intent intent = new Intent(getApplicationContext(), ChildMain.class);
                     v.getContext().startActivity(intent);
                 }

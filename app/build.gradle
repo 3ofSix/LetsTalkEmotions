@@ -49,4 +49,6 @@ dependencies {
     //Moshi JSON parser
     implementation 'com.squareup.moshi:moshi:1.6.0'
     implementation 'com.google.code.gson:gson:2.8.5'
+    //AnyChart https://github.com/AnyChart/AnyChart-Android
+    implementation 'com.github.AnyChart:AnyChart-Android:0.3.1'
 }

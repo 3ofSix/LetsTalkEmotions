@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddChild" />
-        <activity android:name=".child.ChildMain"></activity>
+        <activity android:name=".child.ChildMain" />
+        <activity android:name=".heartData.LineChart"></activity>
     </application>
 
 </manifest>

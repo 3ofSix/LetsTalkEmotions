@@ -2,17 +2,12 @@ package com.garrettvernon.letstalkemotions.heartData;
 
 import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 //TODO This is proof of concept and works. TIdy up code to a useable class
 /*GET https://api.fitbit.com/1/user/[user-id]/activities/heart/date/[date]/[period].json
@@ -29,14 +24,15 @@ import okhttp3.ResponseBody;
         GET https://api.fitbit.com/1/user/-/activities/heart/date/[date]/[end-date]/[detail-level].json
         GET https://api.fitbit.com/1/user/-/activities/heart/date/[date]/[end-date]/[detail-level]/time/[start-time]/[end-time].json
         GET https://api.fitbit.com/1/user/-/activities/heart/date/[date]/1d/[detail-level].json`
-        GET https://api.fitbit.com/1/user/-/activities/heart/date/[date]/1d/[detail-level]/time/[start-time]/[end-time].json*/
+        GET https://api.fitbit.com/1/user/-/activities/heart/date/[date]/1d/[detail-level]/time/[start-time]/[end-time].json
+        "https://api.fitbit.com/1/user/-/activities/heart/date/2018-08-05/1d/1sec.json";*/
 public class FitBitData {
     private static final String TAG = "FitBitData";
     private final OkHttpClient client = new OkHttpClient();
-    private final String baseUrl = "https://api.fitbit.com/1/user/-/activities/heart/date/2018-08-05/1d/1sec.json";
+    private final String baseUrl = "https://api.fitbit.com/1/user/-/activities/heart/date/2018-08-05/1d/1sec/time/18:35/18:40.json";
     private final String headerAuthorisationToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2U0tOUjYiLCJhdWQiOiIyMkNYTTYiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNTM2MzU0MzMxLCJpYXQiOjE1MzM3NjIzMzF9.kIaNR4Sh-rBMvDF5FVqkIcPJbYN4ZOJ-p7oaCOAHxTc";
 
-    public String getFitBitData() throws IOException {
+    public String getFitbitJSON() throws IOException {
         Request request = new Request.Builder()
                 .url(baseUrl)
                 .get()
@@ -54,14 +50,34 @@ public class FitBitData {
         }
     }
 
+    public Dataset[] getFitbitData(){
+        String json = null;
+        try {
+            json = getFitbitJSON();
+        } catch (IOException e){
+            Log.d(TAG, "getFitbitData: Exception " + e);
+        }
+        //Remove the unwanted hyphen in Activities-heart-intraday and Activiites-heart
+        json = json.replaceAll("s-h", "sH");
+        json = json.replaceAll("t-i", "tI");
+
+        Gson gson = new Gson();
+
+        FitBitJson fitBitJson = gson.fromJson(json, FitBitJson.class);
+        ActivitiesHeartIntraday activitiesHeartIntraday = fitBitJson.getActivitiesHeartIntraday();
+        System.out.println("Dataset type: " +activitiesHeartIntraday.getDatasetType());
+        return activitiesHeartIntraday.getDataset();
+    }
+
+
+
     //TODO Remove main method before final packaging
     public static void main(String[] args) throws Exception {
-        String jString = new FitBitData().getFitBitData();
-        //String bodyString = jString.string();
-        JsonParser parser = new JsonParser();
-        //JsonArray array = parser.parse(bodyString).getAsJsonArray();
-        //JSONObject jsonObject = new JSONObject(jString);
-        //JSONArray jsonArray = jsonObject.getJSONArray("heart-data-intraday");
+        //do something cool
+        FitBitData fitBitData = new FitBitData();
+        for (Dataset data : fitBitData.getFitbitData()){
+            System.out.println("Time: " + data.getTime() + " HeartRate: " + data.getValue());
+        }
     }
 
 }
