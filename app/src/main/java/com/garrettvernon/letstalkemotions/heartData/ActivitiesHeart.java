@@ -1,34 +1,49 @@
 package com.garrettvernon.letstalkemotions.heartData;
 
-public class ActivitiesHeart {
 
+public class ActivitiesHeart {
     private String dateTime;
 
-    private Value value;
+    private HeartRateZones[] heartRateZones;
 
-    public String getDateTime ()
-    {
+    private String[] customHeartRateZones;
+
+    private String value;
+
+    public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime (String dateTime)
-    {
+    public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
 
-    public Value getValue ()
-    {
+    public HeartRateZones[] getHeartRateZones() {
+        return heartRateZones;
+    }
+
+    public void setHeartRateZones(HeartRateZones[] heartRateZones) {
+        this.heartRateZones = heartRateZones;
+    }
+
+    public String[] getCustomHeartRateZones() {
+        return customHeartRateZones;
+    }
+
+    public void setCustomHeartRateZones(String[] customHeartRateZones) {
+        this.customHeartRateZones = customHeartRateZones;
+    }
+
+    public String getValue() {
         return value;
     }
 
-    public void setValue (Value value)
-    {
+    public void setValue(String value) {
         this.value = value;
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [dateTime = "+dateTime+", value = "+value+"]";
+    public String toString() {
+        return "ClassPojo [dateTime = " + dateTime + ", heartRateZones = " + heartRateZones + ", customHeartRateZones = " + customHeartRateZones + ", value = " + value + "]";
     }
 }

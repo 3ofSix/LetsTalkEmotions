@@ -2,6 +2,7 @@ package com.garrettvernon.letstalkemotions.heartData;
 
 import android.util.Log;
 
+
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 //TODO This is proof of concept and works. TIdy up code to a useable class
+//NOTE THIS SOLUTION CURRENTLY ONLY WORKS FRO GiVEN TIME SLOTS
 /*GET https://api.fitbit.com/1/user/[user-id]/activities/heart/date/[date]/[period].json
         GET https://api.fitbit.com/1/user/[user-id]/activities/heart/date/[base-date]/[end-date].json
 
@@ -71,13 +73,13 @@ public class FitBitData {
 
 
 
-    //TODO Remove main method before final packaging
+    /*//TODO Remove main method before final packaging
     public static void main(String[] args) throws Exception {
         //do something cool
         FitBitData fitBitData = new FitBitData();
         for (Dataset data : fitBitData.getFitbitData()){
             System.out.println("Time: " + data.getTime() + " HeartRate: " + data.getValue());
         }
-    }
+    }*/
 
 }
