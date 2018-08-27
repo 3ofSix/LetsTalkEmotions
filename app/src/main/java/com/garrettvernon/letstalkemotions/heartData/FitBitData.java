@@ -1,14 +1,16 @@
 package com.garrettvernon.letstalkemotions.heartData;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+
 
 //TODO This is proof of concept and works. TIdy up code to a useable class
 //NOTE THIS SOLUTION CURRENTLY ONLY WORKS FRO GiVEN TIME SLOTS
@@ -28,37 +30,49 @@ import okhttp3.Response;
         GET https://api.fitbit.com/1/user/-/activities/heart/date/[date]/1d/[detail-level].json`
         GET https://api.fitbit.com/1/user/-/activities/heart/date/[date]/1d/[detail-level]/time/[start-time]/[end-time].json
         "https://api.fitbit.com/1/user/-/activities/heart/date/2018-08-05/1d/1sec.json";*/
-public class FitBitData {
+public class FitBitData implements AsyncResponse {
     private static final String TAG = "FitBitData";
-    private final OkHttpClient client = new OkHttpClient();
     private final String baseUrl = "https://api.fitbit.com/1/user/-/activities/heart/date/2018-08-05/1d/1sec/time/18:35/18:40.json";
     private final String headerAuthorisationToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2U0tOUjYiLCJhdWQiOiIyMkNYTTYiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNTM2MzU0MzMxLCJpYXQiOjE1MzM3NjIzMzF9.kIaNR4Sh-rBMvDF5FVqkIcPJbYN4ZOJ-p7oaCOAHxTc";
+    private Dataset[] fitbitData;
+    private Context context;
 
-    public String getFitbitJSON() throws IOException {
-        Request request = new Request.Builder()
-                .url(baseUrl)
-                .get()
-                .addHeader("authorization", headerAuthorisationToken)
-                .addHeader("cache-control", "no-cache")
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                Log.d(TAG, "getFitBitData: IOException" + response);
-                throw new IOException("Unexpected code " + response);
-            }
-            //String jsonData = response.body().string().toString();
-            return response.body().string();
-        }
+    public FitBitData(Context context) {
+        this.context = context;
+        new DataRequest(this).execute(this);
     }
 
-    public Dataset[] getFitbitData(){
-        String json = null;
-        try {
-            json = getFitbitJSON();
-        } catch (IOException e){
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public String getHeaderAuthorisationToken() {
+        return headerAuthorisationToken;
+
+    }
+
+    public Dataset[] getFitbitData() {
+        return fitbitData;
+    }
+
+    private void setFitbitData(Dataset[] fitbitData) {
+        Log.d(TAG, "setFitbitData: called");
+        this.fitbitData = fitbitData;
+        Log.d(TAG, "setFitbitData: Brodacasting ready");
+        Intent intent = new Intent("fitbitdata_ready");
+        intent.putExtra("msg", "BroadCast Message!");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    @Override
+    public void processFinish(String result) {
+        Log.d(TAG, "processFinish: in FitBitData");
+        String json = result;
+       /* try {
+            json = result;
+        } catch (IOException e) {
             Log.d(TAG, "getFitbitData: Exception " + e);
-        }
+        }*/
         //Remove the unwanted hyphen in Activities-heart-intraday and Activiites-heart
         json = json.replaceAll("s-h", "sH");
         json = json.replaceAll("t-i", "tI");
@@ -67,8 +81,7 @@ public class FitBitData {
 
         FitBitJson fitBitJson = gson.fromJson(json, FitBitJson.class);
         ActivitiesHeartIntraday activitiesHeartIntraday = fitBitJson.getActivitiesHeartIntraday();
-        System.out.println("Dataset type: " +activitiesHeartIntraday.getDatasetType());
-        return activitiesHeartIntraday.getDataset();
+        setFitbitData(activitiesHeartIntraday.getDataset());
     }
 
 

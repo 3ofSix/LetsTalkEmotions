@@ -10,12 +10,22 @@ public class Dataset {
         return time;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public Float getTimeFloat() {
+        Float timeFloat = Float.parseFloat(getTime());
+        return timeFloat;
     }
 
     public String getValue() {
         return value;
+    }
+
+    public Float getValueFloat() {
+        Float valueFloat = Float.parseFloat(getValue());
+        return valueFloat;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public void setValue(String value) {

@@ -33,4 +33,5 @@ ext {
     roomVersion = "1.1.1"
     espressoVersion = "3.0.2"
     okHttpVersion = "3.11.0"
+    MPAndroidChartVersion = "v3.0.3"
 }
