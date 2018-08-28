@@ -16,9 +16,13 @@ import com.garrettvernon.letstalkemotions.R;
 import com.garrettvernon.letstalkemotions.heartData.Dataset;
 import com.garrettvernon.letstalkemotions.heartData.FitBitData;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +34,7 @@ public class ChartFragment extends Fragment {
     private LineChart chart;
     private LineDataSet dataSet;
     FitBitData fitBitData;
+    List<String> times;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,24 +48,23 @@ public class ChartFragment extends Fragment {
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            String message = intent.getStringExtra("msg");
-            Log.d("receiver", "Got message: " + message);
+            Log.d("receiver", "ChartFragment got message");
             //LineDataset objects hold data that belong together and can be styled
-            dataSet = new LineDataSet(getData(),"Label"); //Label appears if Legend is enabled
-            //LineData objects hold all LineDatasets for the chart. Cn be styled
+            dataSet = new LineDataSet(getData(),"Heart Rate"); //Label appears if Legend is enabled
+            //Format labels for xAxis
+            XAxis xAxis = chart.getXAxis();
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            xAxis.setDrawAxisLine(true);
+            xAxis.setGranularity(1f);
+            xAxis.setValueFormatter(new xAxisValueFormatter(times));
+            //Format yAxis
+            chart.getAxisRight().setEnabled(false);
+            //LineData objects hold all LineDatasets for the chart. Can be styled
             LineData lineData = new LineData(dataSet);
             chart.setData(lineData);
             chart.invalidate(); //refresh chart
         }
     };
-
-    @Override
-    public void onDestroy() {
-        // Unregister since the activity is about to be closed.
-        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mMessageReceiver);
-        super.onDestroy();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,22 +76,38 @@ public class ChartFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        // Unregister since the activity is about to be closed.
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mMessageReceiver);
+        super.onDestroy();
+    }
+
     public List<Entry> getData(){
         Float timeCount = 0f;
+        times = new ArrayList<>();
         List<Entry> entries = new ArrayList<>();
         Dataset[] dataObjects = fitBitData.getFitbitData();
         for (Dataset data: dataObjects){
             //Make data Entry objects
-            //entries.add(new Entry(data.getTimeFloat(), data.getValueFloat()));
             entries.add(new Entry(timeCount, data.getValueFloat()));
+            times.add(data.getTime());
             timeCount++;
         }
-      /*  entries.add(new Entry(0,2));
-        entries.add(new Entry(2,4));
-        entries.add(new Entry(4,6));
-        entries.add(new Entry(6,8));
-        entries.add(new Entry(8,10));
-        entries.add(new Entry(10,12));*/
         return entries;
+    }
+
+    public class xAxisValueFormatter implements IAxisValueFormatter {
+
+        private List<String> mValues;
+
+        public xAxisValueFormatter(List<String> mValues) {
+            this.mValues = mValues;
+        }
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            return mValues.get((int) value);
+        }
     }
 }

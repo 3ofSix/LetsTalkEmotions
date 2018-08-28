@@ -60,7 +60,6 @@ public class FitBitData implements AsyncResponse {
         this.fitbitData = fitbitData;
         Log.d(TAG, "setFitbitData: Brodacasting ready");
         Intent intent = new Intent("fitbitdata_ready");
-        intent.putExtra("msg", "BroadCast Message!");
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 

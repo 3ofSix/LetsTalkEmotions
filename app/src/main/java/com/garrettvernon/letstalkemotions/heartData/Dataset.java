@@ -10,11 +10,6 @@ public class Dataset {
         return time;
     }
 
-    public Float getTimeFloat() {
-        Float timeFloat = Float.parseFloat(getTime());
-        return timeFloat;
-    }
-
     public String getValue() {
         return value;
     }
