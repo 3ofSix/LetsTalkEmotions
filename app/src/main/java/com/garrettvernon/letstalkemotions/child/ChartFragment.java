@@ -27,12 +27,17 @@ import java.util.List;
 public class ChartFragment extends Fragment {
 
     private static final String TAG = "ChartFragment";
+    private LineChart chart;
+    private LineDataSet dataSet;
+    FitBitData fitBitData;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Register a broadcast manager
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(mMessageReceiver,
                 new IntentFilter("fitbitdata_ready"));
+        fitBitData = new FitBitData(getContext());
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -41,6 +46,12 @@ public class ChartFragment extends Fragment {
             // Get extra data included in the Intent
             String message = intent.getStringExtra("msg");
             Log.d("receiver", "Got message: " + message);
+            //LineDataset objects hold data that belong together and can be styled
+            dataSet = new LineDataSet(getData(),"Label"); //Label appears if Legend is enabled
+            //LineData objects hold all LineDatasets for the chart. Cn be styled
+            LineData lineData = new LineData(dataSet);
+            chart.setData(lineData);
+            chart.invalidate(); //refresh chart
         }
     };
 
@@ -57,31 +68,26 @@ public class ChartFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_chart, container, false);
         Log.d(TAG, "onCreateView: Started");
-        LineChart chart = (LineChart) view.findViewById(R.id.chart);
-        //LineDataset objects hold data that belong together and can be styled
-        LineDataSet dataSet = new LineDataSet(getData(),"Label"); //Label appears if Legend is enabled
-        //LineData objects hold all LineDatasets for the chart. Cn be styled
-        LineData lineData = new LineData(dataSet);
-        chart.setData(lineData);
-        chart.invalidate(); //refresh chart
-
+        chart = (LineChart) view.findViewById(R.id.chart);
         return view;
     }
 
     public List<Entry> getData(){
-        FitBitData fitBitData = new FitBitData(getContext());
+        Float timeCount = 0f;
         List<Entry> entries = new ArrayList<>();
-        /*Dataset[] dataObjects = fitBitData.getFitbitData();
+        Dataset[] dataObjects = fitBitData.getFitbitData();
         for (Dataset data: dataObjects){
             //Make data Entry objects
-            entries.add(new Entry(data.getTimeFloat(), data.getValueFloat()));
-        }*/
-        entries.add(new Entry(0,2));
+            //entries.add(new Entry(data.getTimeFloat(), data.getValueFloat()));
+            entries.add(new Entry(timeCount, data.getValueFloat()));
+            timeCount++;
+        }
+      /*  entries.add(new Entry(0,2));
         entries.add(new Entry(2,4));
         entries.add(new Entry(4,6));
         entries.add(new Entry(6,8));
         entries.add(new Entry(8,10));
-        entries.add(new Entry(10,12));
+        entries.add(new Entry(10,12));*/
         return entries;
     }
 }
