@@ -31,7 +31,7 @@ import com.google.gson.Gson;
 public class FitBitData implements AsyncResponse {
     private static final String TAG = "FitBitData";
     private final String baseUrl = "https://api.fitbit.com/1/user/-/activities/heart/date/2018-08-05/1d/1sec/time/18:35/18:40.json";
-    private final String headerAuthorisationToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2U0tOUjYiLCJhdWQiOiIyMkNYTTYiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJwcm8gcm51dCByc2xlIiwiZXhwIjoxNTM2MzU0MzMxLCJpYXQiOjE1MzM3NjIzMzF9.kIaNR4Sh-rBMvDF5FVqkIcPJbYN4ZOJ-p7oaCOAHxTc";
+    private final String headerAuthorisationToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2U0tOUjYiLCJhdWQiOiIyMkNYTTYiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNTM3Mzg0MDkwLCJpYXQiOjE1MzY3NzkyOTB9.iuE6DwhmPipVzn_ZukQ0HDBlsc_picbbNZmukrBURXc";
     private Dataset[] fitbitData;
     private Context context;
 
