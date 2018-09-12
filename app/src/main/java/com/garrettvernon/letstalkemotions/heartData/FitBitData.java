@@ -2,14 +2,12 @@ package com.garrettvernon.letstalkemotions.heartData;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 
 import com.google.gson.Gson;
 
-import java.io.IOException;
 
 
 //TODO This is proof of concept and works. TIdy up code to a useable class
@@ -67,11 +65,7 @@ public class FitBitData implements AsyncResponse {
     public void processFinish(String result) {
         Log.d(TAG, "processFinish: in FitBitData");
         String json = result;
-       /* try {
-            json = result;
-        } catch (IOException e) {
-            Log.d(TAG, "getFitbitData: Exception " + e);
-        }*/
+
         //Remove the unwanted hyphen in Activities-heart-intraday and Activiites-heart
         json = json.replaceAll("s-h", "sH");
         json = json.replaceAll("t-i", "tI");
@@ -82,16 +76,5 @@ public class FitBitData implements AsyncResponse {
         ActivitiesHeartIntraday activitiesHeartIntraday = fitBitJson.getActivitiesHeartIntraday();
         setFitbitData(activitiesHeartIntraday.getDataset());
     }
-
-
-
-    /*//TODO Remove main method before final packaging
-    public static void main(String[] args) throws Exception {
-        //do something cool
-        FitBitData fitBitData = new FitBitData();
-        for (Dataset data : fitBitData.getFitbitData()){
-            System.out.println("Time: " + data.getTime() + " HeartRate: " + data.getValue());
-        }
-    }*/
 
 }
