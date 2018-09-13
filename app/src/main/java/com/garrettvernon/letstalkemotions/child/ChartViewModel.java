@@ -2,7 +2,7 @@ package com.garrettvernon.letstalkemotions.child;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,13 +12,9 @@ import android.util.Log;
 
 import com.garrettvernon.letstalkemotions.heartData.Dataset;
 import com.garrettvernon.letstalkemotions.heartData.FitBitData;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +25,11 @@ public class ChartViewModel extends AndroidViewModel {
      */
 
     private static final String TAG = "ChartViewModel";
-    private LineChart chart;
-    private LiveData<LineChart> chartLiveData;
     private LineDataSet dataSet;
-    FitBitData fitBitData;
-    List<String> times;
+    private MutableLiveData<LineData> liveLineData = new MutableLiveData<>();
+    private FitBitData fitBitData;
+
+    private List<String> times;
 
     public ChartViewModel(Application application) {
         super(application);
@@ -41,12 +37,13 @@ public class ChartViewModel extends AndroidViewModel {
         //Register a broadcast manager
         LocalBroadcastManager.getInstance(application).registerReceiver(mMessageReceiver,
                 new IntentFilter("fitbitdata_ready"));
-        fitBitData = new FitBitData(application.getApplicationContext());
+        fitBitData = new FitBitData(application);
     }
 
-    public LiveData<LineChart> getChartLiveData() {
-        return chartLiveData;
+    public MutableLiveData<LineData> getLiveLineData() {
+        return liveLineData;
     }
+
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -54,18 +51,8 @@ public class ChartViewModel extends AndroidViewModel {
             Log.d("receiver", "ChartFragment got message");
             //LineDataset objects hold data that belong together and can be styled
             dataSet = new LineDataSet(getData(),"Heart Rate"); //Label appears if Legend is enabled
-            //Format labels for xAxis
-            XAxis xAxis = chart.getXAxis();
-            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-            xAxis.setDrawAxisLine(true);
-            xAxis.setGranularity(1f);
-           xAxis.setValueFormatter(new xAxisValueFormatter(times));
-            //Format yAxis
-            chart.getAxisRight().setEnabled(false);
-            //LineData objects hold all LineDatasets for the chart. Can be styled
             LineData lineData = new LineData(dataSet);
-            chart.setData(lineData);
-            //chart.invalidate(); //refresh chart
+            liveLineData.postValue(lineData);
         }
     };
 
@@ -83,17 +70,8 @@ public class ChartViewModel extends AndroidViewModel {
         return entries;
     }
 
-    public class xAxisValueFormatter implements IAxisValueFormatter {
-
-        private List<String> mValues;
-
-        public xAxisValueFormatter(List<String> mValues) {
-            this.mValues = mValues;
-        }
-
-        @Override
-        public String getFormattedValue(float value, AxisBase axis) {
-            return mValues.get((int) value);
-        }
+    public List<String> getTimes() {
+        return times;
     }
+
 }
